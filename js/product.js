@@ -1,57 +1,373 @@
 (function () {
   "use strict";
+
   var detail = document.getElementById("product-detail");
   var productId = new URLSearchParams(window.location.search).get("id");
   var product = window.catalogData.products.find(function (item) { return String(item.id) === productId; });
-  var currency = new Intl.NumberFormat("es-MX", { style: "currency", currency: "MXN", maximumFractionDigits: 0 });
-  if (!product) { document.title = "Producto no encontrado | Segunda Vida"; detail.className = "not-found"; detail.innerHTML = "<h1>Producto no encontrado</h1><p>El producto solicitado no existe o el enlace es incorrecto.</p>"; return; }
+
+  var currency = new Intl.NumberFormat("es-MX", {
+    style: "currency",
+    currency: "MXN",
+    maximumFractionDigits: 0
+  });
+
+  if (!product) {
+    document.title = "Producto no encontrado | Segunda Vida";
+    detail.className = "not-found";
+    detail.innerHTML = "<h1>Producto no encontrado</h1><p>El producto solicitado no existe o el enlace es incorrecto.</p>";
+    return;
+  }
+
+
+  // Google Analytics 4 - Vista de producto
+  if (typeof gtag === "function") {
+    gtag("event", "view_item", {
+      items: [
+        {
+          item_id: String(product.id),
+          item_name: product.name,
+          item_brand: product.brand,
+          item_category: product.category,
+          item_category2: product.subcategory,
+          price: product.price,
+          currency: "MXN"
+        }
+      ]
+    });
+  }
+
 
   document.title = product.name + " | Segunda Vida";
   detail.className = "product-detail";
+
   var images = Array.isArray(product.images) ? product.images.filter(Boolean) : [];
   var hasImages = images.length > 0;
-  var gallery = document.createElement("section"); gallery.className = "carousel"; gallery.setAttribute("aria-label", "Galería de imágenes de " + product.name);
-  var image = document.createElement("img"); image.className = "carousel-image";
-  var controls = document.createElement("div"); controls.className = "carousel-controls";
-  var previous = document.createElement("button"); previous.type = "button"; previous.className = "carousel-button"; previous.textContent = "← Anterior";
-  var next = document.createElement("button"); next.type = "button"; next.className = "carousel-button"; next.textContent = "Siguiente →"; controls.append(previous, next);
-  var indicators = document.createElement("div"); indicators.className = "carousel-indicators"; indicators.setAttribute("aria-label", "Seleccionar imagen");
-  var info = document.createElement("div"); info.className = "product-info";
-  var heading = document.createElement("h1"); heading.textContent = product.name;
-  var price = document.createElement("p"); price.className = "price"; price.textContent = currency.format(product.price);
-  var availability = document.createElement("p"); availability.className = "availability " + (product.available ? "available" : "unavailable"); availability.textContent = product.available ? "Disponible" : "No disponible";
-  var description = document.createElement("p"); description.className = "description"; description.textContent = product.description;
-  var metadata = document.createElement("ul"); metadata.className = "product-meta";
-  var contact = document.createElement("section"); contact.className = "product-contact"; contact.setAttribute("aria-label", "Contacto sobre este artículo");
-  var contactQuestion = document.createElement("p"); contactQuestion.textContent = "¿Te gustó este artículo?";
-  var contactLink = document.createElement("a"); contactLink.href = window.catalogData.siteConfig.facebookUrl; contactLink.target = "_blank"; contactLink.rel = "noopener noreferrer"; contactLink.textContent = "Contáctame por Facebook";
-  [["Marca", product.brand], ["Categoría", product.category], ["Subcategoría", product.subcategory], ["Condición", product.condition]].forEach(function (item) { var row = document.createElement("li"); var label = document.createElement("strong"); label.textContent = item[0] + ":"; row.append(label, " " + item[1]); metadata.appendChild(row); });
-  var productFacebookLink = document.createElement("a"); productFacebookLink.className = "product-facebook-link"; productFacebookLink.href = product.facebookUrl; productFacebookLink.textContent = "Ver en Facebook";
-  if (product.facebookUrl === "#") { productFacebookLink.setAttribute("aria-disabled", "true"); productFacebookLink.addEventListener("click", function (event) { event.preventDefault(); }); } else { productFacebookLink.target = "_blank"; productFacebookLink.rel = "noopener noreferrer"; }
-  metadata.appendChild(productFacebookLink);
-  contact.append(contactQuestion, contactLink); info.append(heading, price, availability, description, metadata, contact);
-  gallery.append(image); if (images.length > 1) gallery.append(controls, indicators); detail.append(gallery, info);
 
-  var currentIndex = 0;
-  function showImage(index) {
-    if (!hasImages) {
-      image.src = "images/products/placeholder.svg";
-      image.alt = "Imagen no disponible de " + product.name;
-      return;
+
+  var gallery = document.createElement("section");
+  gallery.className = "carousel";
+  gallery.setAttribute("aria-label", "Galería de imágenes de " + product.name);
+
+
+  var image = document.createElement("img");
+  image.className = "carousel-image";
+
+
+  var controls = document.createElement("div");
+  controls.className = "carousel-controls";
+
+
+  var previous = document.createElement("button");
+  previous.type = "button";
+  previous.className = "carousel-button";
+  previous.textContent = "← Anterior";
+
+
+  var next = document.createElement("button");
+  next.type = "button";
+  next.className = "carousel-button";
+  next.textContent = "Siguiente →";
+
+
+  controls.append(previous, next);
+
+
+  var indicators = document.createElement("div");
+  indicators.className = "carousel-indicators";
+  indicators.setAttribute("aria-label", "Seleccionar imagen");
+
+
+  var info = document.createElement("div");
+  info.className = "product-info";
+
+
+  var heading = document.createElement("h1");
+  heading.textContent = product.name;
+
+
+  var price = document.createElement("p");
+  price.className = "price";
+  price.textContent = currency.format(product.price);
+
+
+  var availability = document.createElement("p");
+  availability.className = "availability " + (product.available ? "available" : "unavailable");
+  availability.textContent = product.available ? "Disponible" : "No disponible";
+
+
+  var description = document.createElement("p");
+  description.className = "description";
+  description.textContent = product.description;
+
+
+  var metadata = document.createElement("ul");
+  metadata.className = "product-meta";
+
+
+  var contact = document.createElement("section");
+  contact.className = "product-contact";
+  contact.setAttribute("aria-label", "Contacto sobre este artículo");
+
+
+  var contactQuestion = document.createElement("p");
+  contactQuestion.textContent = "¿Te gustó este artículo?";
+
+
+  var contactLink = document.createElement("a");
+  contactLink.href = window.catalogData.siteConfig.facebookUrl;
+  contactLink.target = "_blank";
+  contactLink.rel = "noopener noreferrer";
+  contactLink.textContent = "Contáctame por Facebook";
+
+
+  // Google Analytics 4 - Click contacto Facebook
+  contactLink.addEventListener("click", function () {
+
+    if (typeof gtag === "function") {
+      gtag("event", "contact_facebook", {
+        product_id: String(product.id),
+        product_name: product.name,
+        facebook_url: product.facebookUrl
+      });
     }
-    currentIndex = (index + images.length) % images.length;
-    image.src = images[currentIndex];
-    image.alt = product.name + ", imagen " + (currentIndex + 1) + " de " + images.length;
-    Array.prototype.forEach.call(indicators.children, function (indicator, indicatorIndex) { indicator.setAttribute("aria-current", String(indicatorIndex === currentIndex)); });
+
+  });
+
+
+
+  [
+    ["Marca", product.brand],
+    ["Categoría", product.category],
+    ["Subcategoría", product.subcategory],
+    ["Condición", product.condition]
+  ].forEach(function (item) {
+
+    var row = document.createElement("li");
+
+    var label = document.createElement("strong");
+    label.textContent = item[0] + ":";
+
+    row.append(label, " " + item[1]);
+
+    metadata.appendChild(row);
+
+  });
+
+
+
+  var productFacebookLink = document.createElement("a");
+
+  productFacebookLink.className = "product-facebook-link";
+  productFacebookLink.href = product.facebookUrl;
+  productFacebookLink.textContent = "Ver en Facebook";
+
+
+  // Google Analytics 4 - Click Facebook producto
+  productFacebookLink.addEventListener("click", function () {
+
+    if (typeof gtag === "function") {
+
+      gtag("event", "click_facebook_product", {
+
+        product_id: String(product.id),
+        product_name: product.name,
+        facebook_url: product.facebookUrl,
+        price: product.price,
+        currency: "MXN"
+
+      });
+
+    }
+
+  });
+
+
+
+  if (product.facebookUrl === "#") {
+
+    productFacebookLink.setAttribute("aria-disabled", "true");
+
+    productFacebookLink.addEventListener("click", function (event) {
+      event.preventDefault();
+    });
+
+  } else {
+
+    productFacebookLink.target = "_blank";
+    productFacebookLink.rel = "noopener noreferrer";
+
   }
+
+
+
+  metadata.appendChild(productFacebookLink);
+
+
+  contact.append(contactQuestion, contactLink);
+
+  info.append(
+      heading,
+      price,
+      availability,
+      description,
+      metadata,
+      contact
+  );
+
+
+  gallery.append(image);
 
   if (images.length > 1) {
-    images.forEach(function (_, index) { var indicator = document.createElement("button"); indicator.type = "button"; indicator.className = "indicator"; indicator.setAttribute("aria-label", "Mostrar imagen " + (index + 1)); indicator.addEventListener("click", function () { showImage(index); }); indicators.appendChild(indicator); });
-    previous.addEventListener("click", function () { showImage(currentIndex - 1); });
-    next.addEventListener("click", function () { showImage(currentIndex + 1); });
-    var touchStartX = null;
-    gallery.addEventListener("touchstart", function (event) { touchStartX = event.changedTouches[0].screenX; }, { passive: true });
-    gallery.addEventListener("touchend", function (event) { if (touchStartX === null) return; var distance = event.changedTouches[0].screenX - touchStartX; if (Math.abs(distance) > 40) showImage(currentIndex + (distance < 0 ? 1 : -1)); touchStartX = null; }, { passive: true });
+    gallery.append(controls, indicators);
   }
+
+
+  detail.append(gallery, info);
+
+
+
+  var currentIndex = 0;
+
+
+  function showImage(index) {
+
+    if (!hasImages) {
+
+      image.src = "images/products/placeholder.svg";
+      image.alt = "Imagen no disponible de " + product.name;
+
+      return;
+
+    }
+
+
+    currentIndex = (index + images.length) % images.length;
+
+    image.src = images[currentIndex];
+
+    image.alt =
+        product.name +
+        ", imagen " +
+        (currentIndex + 1) +
+        " de " +
+        images.length;
+
+
+    Array.prototype.forEach.call(
+        indicators.children,
+        function (indicator, indicatorIndex) {
+
+          indicator.setAttribute(
+              "aria-current",
+              String(indicatorIndex === currentIndex)
+          );
+
+        }
+    );
+
+  }
+
+
+
+  if (images.length > 1) {
+
+    images.forEach(function (_, index) {
+
+      var indicator = document.createElement("button");
+
+      indicator.type = "button";
+
+      indicator.className = "indicator";
+
+      indicator.setAttribute(
+          "aria-label",
+          "Mostrar imagen " + (index + 1)
+      );
+
+
+      indicator.addEventListener(
+          "click",
+          function () {
+            showImage(index);
+          }
+      );
+
+
+      indicators.appendChild(indicator);
+
+    });
+
+
+
+    previous.addEventListener(
+        "click",
+        function () {
+          showImage(currentIndex - 1);
+        }
+    );
+
+
+    next.addEventListener(
+        "click",
+        function () {
+          showImage(currentIndex + 1);
+        }
+    );
+
+
+
+    var touchStartX = null;
+
+
+    gallery.addEventListener(
+        "touchstart",
+        function (event) {
+
+          touchStartX = event.changedTouches[0].screenX;
+
+        },
+        {
+          passive: true
+        }
+    );
+
+
+
+    gallery.addEventListener(
+        "touchend",
+        function (event) {
+
+          if (touchStartX === null) {
+            return;
+          }
+
+
+          var distance =
+              event.changedTouches[0].screenX -
+              touchStartX;
+
+
+          if (Math.abs(distance) > 40) {
+
+            showImage(
+                currentIndex +
+                (distance < 0 ? 1 : -1)
+            );
+
+          }
+
+
+          touchStartX = null;
+
+        },
+        {
+          passive: true
+        }
+    );
+
+  }
+
+
   showImage(0);
+
 }());
