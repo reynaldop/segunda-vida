@@ -13,7 +13,29 @@
   var productsPerPage = 24;
   var currentPage = 1;
   function addOption(select, value, label) { var option = document.createElement("option"); option.value = value; option.textContent = label; select.appendChild(option); }
-  function createFacebookLink() { var link = document.createElement("a"); link.href = data.siteConfig.facebookUrl; link.target = "_blank"; link.rel = "noopener noreferrer"; link.textContent = "Facebook"; return link; }
+  function createFacebookLink() {
+    var link = document.createElement("a");
+    link.href = data.siteConfig.facebookUrl;
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    link.textContent = "Facebook";
+
+    // Google Analytics 4 - Contacto Facebook desde catálogo
+    link.addEventListener("click", function () {
+
+      if (typeof gtag === "function") {
+
+        gtag("event", "contact_facebook_catalog", {
+          source: "catalog",
+          facebook_url: data.siteConfig.facebookUrl
+        });
+
+      }
+
+    });
+
+    return link;
+  }
   function renderCatalogContact() { var question = document.createElement("p"); question.textContent = "¿Te gustó alguno de nuestros artículos?"; var message = document.createElement("p"); message.append("Puedes contactarnos desde ", createFacebookLink(), "."); catalogContact.append(question, message); }
   function populateCategories() { data.categories.forEach(function (category) { addOption(categorySelect, category.name, category.name); }); }
   function populateSubcategories(categoryName) {
@@ -64,7 +86,30 @@
     renderPagination(totalPages);
   }
   renderCatalogContact(); populateCategories(); populateSubcategories(""); renderProducts();
-  searchInput.addEventListener("input", function () { currentPage = 1; renderProducts(); });
+  var searchTimeout;
+
+  searchInput.addEventListener("input", function () {
+
+    clearTimeout(searchTimeout);
+
+    searchTimeout = setTimeout(function () {
+
+      currentPage = 1;
+      renderProducts();
+
+      var term = searchInput.value.trim();
+
+      if (term && typeof gtag === "function") {
+
+        gtag("event", "search", {
+          search_term: term
+        });
+
+      }
+
+    }, 800);
+
+  });
   categorySelect.addEventListener("change", function () { currentPage = 1; populateSubcategories(categorySelect.value); renderProducts(); });
   subcategorySelect.addEventListener("change", function () { currentPage = 1; renderProducts(); });
 }());
