@@ -36,7 +36,7 @@
 
     return link;
   }
-  function renderCatalogContact() { var question = document.createElement("p"); question.textContent = "¿Te gustó alguno de nuestros artículos?"; var message = document.createElement("p"); message.append("Puedes contactarnos desde ", createFacebookLink(), "."); catalogContact.append(question, message); }
+  function renderCatalogContact() { var question = document.createElement("p"); question.textContent = "¿Te gustó alguno de nuestros artículos?"; var message = document.createElement("p"); message.append("Puedes contactarnos desde ", createFacebookLink(), ". 👈 Da click"); catalogContact.append(question, message); }
   function populateCategories() { data.categories.forEach(function (category) { addOption(categorySelect, category.name, category.name); }); }
   function populateSubcategories(categoryName) {
     var selectedValue = subcategorySelect.value;

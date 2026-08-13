@@ -1,7 +1,7 @@
 /* Modifica únicamente este archivo para añadir categorías, subcategorías y productos. */
 window.catalogData = {
   siteConfig: {
-    facebookUrl: "https://www.facebook.com/elbauldeorotienda"
+    facebookUrl: "https://www.facebook.com/segundavidastores"
   },
   categories: [
     { name: "Ropa", subcategories: ["Mujer", "Hombre", "Niños"] },
