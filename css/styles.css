@@ -1,0 +1,66 @@
+:root { --ink:#1f2933; --muted:#5c6873; --surface:#fff; --background:#f5f4f0; --line:#d9ddd9; --accent:#176b57; --accent-dark:#0f4d3e; --available:#146c43; --unavailable:#9a3412; --radius:.75rem; --shadow:0 3px 14px rgb(31 41 51 / 10%); }
+* { box-sizing:border-box; }
+html { color:var(--ink); background:var(--background); font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+body { margin:0; min-width:320px; }
+img { display:block; max-width:100%; }
+button,input,select { font:inherit; }
+.container { width:min(1120px,calc(100% - 2rem)); margin:0 auto; }
+.site-header { padding:1.25rem 0; background:var(--surface); border-bottom:1px solid var(--line); }
+.header-content { display:flex; gap:1rem; justify-content:space-between; align-items:baseline; flex-wrap:wrap; }
+.brand { color:var(--accent-dark); font-size:1.35rem; font-weight:800; text-decoration:none; }
+.site-tagline { margin:0; color:var(--muted); font-size:.95rem; }
+.catalog-intro { padding:2.5rem 0 1rem; }
+h1,h2,h3,p { overflow-wrap:break-word; }
+h1 { margin:0 0 .5rem; font-size:clamp(1.8rem,4vw,2.6rem); }
+.catalog-intro p { margin:0; color:var(--muted); }
+.catalog-intro #catalog-contact { display:grid; gap:.35rem; margin-top:1rem; }
+.filters { display:grid; grid-template-columns:2fr 1fr 1fr; gap:1rem; padding:1rem; background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); }
+.filter-field { display:grid; gap:.35rem; }
+label { font-size:.9rem; font-weight:700; }
+input,select { width:100%; min-height:2.7rem; padding:.55rem .7rem; color:var(--ink); background:var(--surface); border:1px solid #aab4ae; border-radius:.4rem; }
+select:disabled { color:var(--muted); background:#eef0ee; }
+.results-count { min-height:1.5rem; margin:1.5rem 0 1rem; color:var(--muted); }
+.product-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:1.25rem; padding-bottom:2.5rem; }
+.product-card { display:flex; flex-direction:column; overflow:hidden; background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); }
+.product-card img { width:100%; aspect-ratio:4/3; object-fit:contain; background:#e9ebe8; }
+.card-content { display:grid; gap:.55rem; padding:1rem; height:100%; }
+.card-category { margin:0; color:var(--muted); font-size:.85rem; }
+.card-title { margin:0; font-size:1.1rem; }
+.card-title a { color:inherit; text-decoration:none; }
+.product-brand { margin:0; color:var(--muted); font-size:.9rem; }
+.price { margin:0; color:var(--accent-dark); font-size:1.25rem; font-weight:800; }
+.availability { margin:0; font-size:.9rem; font-weight:700; }
+.availability.available { color:var(--available); }
+.availability.unavailable { color:var(--unavailable); }
+.detail-link { align-self:start; margin-top:auto; color:var(--accent-dark); font-weight:700; }
+.empty-state { margin:1rem 0 3rem; padding:1.25rem; background:var(--surface); border-radius:var(--radius); }
+.pagination { display:flex; flex-wrap:wrap; justify-content:center; gap:.5rem; margin:0 0 2.5rem; }
+.pagination-button { min-height:2.5rem; padding:.45rem .75rem; color:var(--accent-dark); background:var(--surface); border:1px solid var(--accent); border-radius:.4rem; font-weight:700; cursor:pointer; }
+.pagination-button:disabled { color:var(--muted); border-color:var(--line); cursor:not-allowed; }
+.pagination-button[aria-current="page"] { color:var(--surface); background:var(--accent); }
+.site-footer { padding:1.25rem 0; color:var(--muted); background:var(--surface); border-top:1px solid var(--line); font-size:.9rem; }
+.product-page { padding-top:1.5rem; padding-bottom:3rem; }
+.back-link { display:inline-block; margin-bottom:1.5rem; color:var(--accent-dark); font-weight:700; }
+.product-detail { display:grid; grid-template-columns:minmax(0,1.15fr) minmax(260px,.85fr); gap:2rem; padding:1.25rem; background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); }
+.product-info h1 { font-size:clamp(1.7rem,4vw,2.35rem); }
+.product-info .price { margin:.75rem 0; font-size:1.55rem; }
+.description { line-height:1.6; }
+.product-meta { display:grid; gap:.65rem; padding:0; margin:1.5rem 0 0; list-style:none; }
+.product-meta strong { display:inline-block; min-width:7rem; }
+.product-facebook-link { color:var(--accent-dark); font-weight:700; }
+.product-facebook-link[aria-disabled="true"] { color:var(--muted); cursor:not-allowed; }
+.product-contact { display:grid; gap:.35rem; margin-top:1.5rem; padding-top:1.25rem; border-top:1px solid var(--line); }
+.product-contact p { margin:0; font-weight:700; }
+.product-contact a,.catalog-intro #catalog-contact a { color:var(--accent-dark); font-weight:700; }
+.not-found { padding:1.5rem; background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); }
+.carousel { position:relative; user-select:none; touch-action:pan-y; }
+.carousel-image { width:100%; aspect-ratio:4/3; object-fit:contain; background:#e9ebe8; border-radius:.5rem; }
+.carousel-controls { display:flex; justify-content:space-between; gap:1rem; margin-top:.75rem; }
+.carousel-button,.indicator { cursor:pointer; }
+.carousel-button { min-height:2.75rem; padding:.5rem .85rem; color:var(--accent-dark); background:var(--surface); border:1px solid var(--accent); border-radius:.4rem; font-weight:700; }
+.carousel-indicators { display:flex; flex-wrap:wrap; justify-content:center; gap:.45rem; margin-top:.85rem; }
+.indicator { width:.8rem; height:.8rem; padding:0; background:#b6c0bb; border:0; border-radius:50%; }
+.indicator[aria-current="true"] { background:var(--accent); transform:scale(1.2); }
+:focus-visible { outline:3px solid #e18c24; outline-offset:3px; }
+.visually-hidden { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+@media (max-width:700px) { .filters,.product-detail { grid-template-columns:1fr; }.header-content { align-items:flex-start; flex-direction:column; gap:.25rem; }.product-detail { gap:1.5rem; } }

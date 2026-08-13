@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Segunda Vida | Catálogo</title>
+  <link rel="icon" type="image/png" href="images/segunda-vida-favicon-40x40.png">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header class="site-header"><div class="container header-content">
+    <a class="brand" href="index.html" aria-label="Segunda Vida, inicio">Segunda Vida</a>
+    <p class="site-tagline">Catálogo de productos de segunda mano</p>
+  </div></header>
+  <main class="container">
+    <section class="catalog-intro" aria-labelledby="catalog-title">
+      <h1 id="catalog-title">Explora el catálogo</h1>
+      <p>Encuentra artículos usados en buen estado. Este sitio es solo informativo.</p>
+      <div id="catalog-contact"></div>
+    </section>
+    <section class="filters" aria-labelledby="filters-title">
+      <h2 id="filters-title" class="visually-hidden">Buscar y filtrar productos</h2>
+      <div class="filter-field filter-search"><label for="search">Buscar</label><input id="search" type="search" placeholder="Nombre o descripción" autocomplete="off"></div>
+      <div class="filter-field"><label for="category-filter">Categoría</label><select id="category-filter"><option value="">Todas las categorías</option></select></div>
+      <div class="filter-field"><label for="subcategory-filter">Subcategoría</label><select id="subcategory-filter"><option value="">Todas las subcategorías</option></select></div>
+    </section>
+    <p id="results-count" class="results-count" aria-live="polite"></p>
+    <section id="product-list" class="product-grid" aria-label="Productos"></section>
+    <p id="empty-state" class="empty-state" hidden>No encontramos productos con esos filtros.</p>
+    <nav id="pagination" class="pagination" aria-label="Paginación de productos" hidden></nav>
+  </main>
+  <footer class="site-footer"><div class="container">Segunda Vida · Catálogo informativo</div></footer>
+  <script src="js/catalog-data.js"></script>
+  <script src="js/catalog.js"></script>
+</body>
+</html>

@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600" role="img" aria-label="Imagen de producto de ejemplo">
+  <rect width="800" height="600" fill="#e7ece8"/><rect x="170" y="130" width="460" height="340" rx="24" fill="#c3d3ca"/>
+  <circle cx="400" cy="250" r="62" fill="#176b57" opacity=".75"/><path d="M270 390l78-82 57 49 61-66 72 99H270z" fill="#176b57" opacity=".75"/>
+  <text x="400" y="530" fill="#365247" font-family="system-ui, sans-serif" font-size="28" text-anchor="middle">Imagen de ejemplo</text>
+</svg>
