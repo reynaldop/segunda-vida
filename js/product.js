@@ -18,6 +18,41 @@
     return;
   }
 
+  // Datos estructurados Schema.org - Product
+  var productSchema = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": product.name,
+    "description": product.description,
+    "sku": String(product.sku),
+    "brand": {
+      "@type": "Brand",
+      "name": product.brand
+    },
+    "category": product.category + " > " + product.subcategory,
+    "image": product.images
+        .filter(Boolean)
+        .map(function (image) {
+          return new URL(image, window.location.href).href;
+        }),
+    "itemCondition": product.condition === "Nuevos"
+        ? "https://schema.org/NewCondition"
+        : "https://schema.org/UsedCondition",
+    "offers": {
+      "@type": "Offer",
+      "url": window.location.href,
+      "priceCurrency": "MXN",
+      "price": product.price.toFixed(2),
+      "availability": product.available
+          ? "https://schema.org/InStock"
+          : "https://schema.org/OutOfStock"
+    }
+  };
+
+  var schemaScript = document.createElement("script");
+  schemaScript.type = "application/ld+json";
+  schemaScript.textContent = JSON.stringify(productSchema);
+  document.head.appendChild(schemaScript);
 
   // Google Analytics 4 - Vista de producto
   if (typeof gtag === "function") {
