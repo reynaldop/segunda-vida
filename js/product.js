@@ -20,7 +20,9 @@
 
   // SEO dinámico del producto
   var productUrl = window.location.href;
-  var productImage = new URL(product.images[0], window.location.href).href;
+  var productImage = product.images && product.images.length
+      ? new URL(product.images[0], window.location.href).href
+      : new URL("images/products/placeholder.svg", window.location.href).href;
 
   document.title = product.name + " | Segunda Vida";
 
@@ -75,7 +77,7 @@
 
   }
 
-  canonical.href = productUrl;
+  canonical.href = window.location.origin + window.location.pathname + "?slug=" + product.slug;
 
 
   setPropertyMeta(
@@ -124,7 +126,8 @@
         : "https://schema.org/UsedCondition",
     "offers": {
       "@type": "Offer",
-      "url": window.location.href,
+      "url": canonical.href,
+      "mpn": product.slug,
       "priceCurrency": "MXN",
       "price": product.price.toFixed(2),
       "availability": product.available
@@ -143,12 +146,44 @@
   schemaScript.textContent = JSON.stringify(productSchema);
   document.head.appendChild(schemaScript);
 
+  // Datos estructurados Schema.org - BreadcrumbList
+  var breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Inicio",
+        "item": "https://reyko.site/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": product.category,
+        "item": "https://reyko.site/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": product.name,
+        "item": canonical.href
+      }
+    ]
+  };
+
+
+  var breadcrumbScript = document.createElement("script");
+  breadcrumbScript.type = "application/ld+json";
+  breadcrumbScript.textContent = JSON.stringify(breadcrumbSchema);
+  document.head.appendChild(breadcrumbScript);
+
   // Google Analytics 4 - Vista de producto
   if (typeof gtag === "function") {
     gtag("event", "view_item", {
       items: [
         {
-          item_id: String(product.id),
+          item_id: String(product.sku),
           item_name: product.name,
           item_brand: product.brand,
           item_category: product.category,
