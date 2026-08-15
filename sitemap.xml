@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+    <url>
+        <loc>https://reyko.site/</loc>
+        <changefreq>weekly</changefreq>
+        <priority>1.0</priority>
+    </url>
+
+    <url>
+        <loc>https://reyko.site/product.html?slug=vestido-sueter-tejido-gris-talla-s</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://reyko.site/product.html?slug=blusa-para-mujer-bydesign-geometrica-con-diseno-de-cuello-de-redondo-cerrado-talla-m</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://reyko.site/product.html?slug=chaleco-y2k-mossimo-vintage-piel-blanco-sin-mangas-corbata-frontal-para-mujer-talla-xl</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://reyko.site/product.html?slug=chamarra-saco-militar-black-august-silk-sportswear-talla-l</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://reyko.site/product.html?slug=blazer-negro-clasico-george-un-basico-infaltable-talla-36</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://reyko.site/product.html?slug=sudadera-michael-kors-cremallera-completa-beige-elastizada-terciopelo-mujer-talla-pequena-xs</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+</urlset>
