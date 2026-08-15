@@ -279,52 +279,62 @@
 
 
 
-  var productFacebookLink = document.createElement("a");
+  var productFacebookLink = null;
 
-  productFacebookLink.className = "product-facebook-link";
-  productFacebookLink.href = product.facebookUrl;
-  productFacebookLink.textContent = "Ver en Facebook";
+  if (product.facebookUrl && product.facebookUrl !== "#") {
 
+    productFacebookLink = document.createElement("a");
 
-  // Google Analytics 4 - Click Facebook producto
-  productFacebookLink.addEventListener("click", function () {
-
-    if (typeof gtag === "function") {
-
-      gtag("event", "click_facebook_product", {
-
-        product_id: String(product.id),
-        product_name: product.name,
-        facebook_url: product.facebookUrl,
-        price: product.price,
-        currency: "MXN"
-
-      });
-
-    }
-
-  });
-
-
-
-  if (product.facebookUrl === "#") {
-
-    productFacebookLink.setAttribute("aria-disabled", "true");
-
-    productFacebookLink.addEventListener("click", function (event) {
-      event.preventDefault();
-    });
-
-  } else {
+    productFacebookLink.className = "product-facebook-link";
+    productFacebookLink.href = product.facebookUrl;
+    productFacebookLink.textContent = "Ver en Facebook";
 
     productFacebookLink.target = "_blank";
     productFacebookLink.rel = "noopener noreferrer";
 
+
+    // Google Analytics 4 - Click Facebook producto
+    productFacebookLink.addEventListener("click", function () {
+
+      if (typeof gtag === "function") {
+
+        gtag("event", "click_facebook_product", {
+
+          product_id: String(product.id),
+          product_name: product.name,
+          facebook_url: product.facebookUrl,
+          price: product.price,
+          currency: "MXN"
+
+        });
+
+      }
+
+    });
+
+
+    if (product.facebookUrl === "#") {
+
+      productFacebookLink.setAttribute("aria-disabled", "true");
+
+      productFacebookLink.addEventListener("click", function (event) {
+        event.preventDefault();
+      });
+
+    } else {
+
+      productFacebookLink.target = "_blank";
+      productFacebookLink.rel = "noopener noreferrer";
+
+    }
   }
 
 
 
-  metadata.appendChild(productFacebookLink);
+
+  if (productFacebookLink) {
+    metadata.appendChild(productFacebookLink);
+  }
 
 
   contact.append(contactQuestion, contactLink);
