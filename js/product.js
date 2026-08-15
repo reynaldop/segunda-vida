@@ -18,6 +18,89 @@
     return;
   }
 
+  // SEO dinámico del producto
+  var productUrl = window.location.href;
+  var productImage = new URL(product.images[0], window.location.href).href;
+
+  document.title = product.name + " | Segunda Vida";
+
+
+  function setMeta(name, content) {
+
+    var meta = document.querySelector('meta[name="' + name + '"]');
+
+    if (!meta) {
+
+      meta = document.createElement("meta");
+      meta.name = name;
+      document.head.appendChild(meta);
+
+    }
+
+    meta.content = content;
+
+  }
+
+
+  function setPropertyMeta(property, content) {
+
+    var meta = document.querySelector('meta[property="' + property + '"]');
+
+    if (!meta) {
+
+      meta = document.createElement("meta");
+      meta.setAttribute("property", property);
+      document.head.appendChild(meta);
+
+    }
+
+    meta.content = content;
+
+  }
+
+
+  setMeta(
+      "description",
+      product.description + " Marca: " + product.brand + ". Disponible en Segunda Vida."
+  );
+
+
+  var canonical = document.querySelector('link[rel="canonical"]');
+
+  if (!canonical) {
+
+    canonical = document.createElement("link");
+    canonical.rel = "canonical";
+    document.head.appendChild(canonical);
+
+  }
+
+  canonical.href = productUrl;
+
+
+  setPropertyMeta(
+      "og:title",
+      product.name + " | Segunda Vida"
+  );
+
+
+  setPropertyMeta(
+      "og:description",
+      product.description
+  );
+
+
+  setPropertyMeta(
+      "og:url",
+      productUrl
+  );
+
+
+  setPropertyMeta(
+      "og:image",
+      productImage
+  );
+
   // Datos estructurados Schema.org - Product
   var productSchema = {
     "@context": "https://schema.org",
@@ -29,6 +112,7 @@
       "@type": "Brand",
       "name": product.brand
     },
+    "additionalType": "https://schema.org/IndividualProduct",
     "category": product.category + " > " + product.subcategory,
     "image": product.images
         .filter(Boolean)
@@ -45,7 +129,12 @@
       "price": product.price.toFixed(2),
       "availability": product.available
           ? "https://schema.org/InStock"
-          : "https://schema.org/OutOfStock"
+          : "https://schema.org/OutOfStock",
+      "seller": {
+        "@type": "Organization",
+        "name": "Segunda Vida",
+        "url": "https://reyko.site/"
+      }
     }
   };
 

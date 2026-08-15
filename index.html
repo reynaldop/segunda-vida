@@ -3,8 +3,27 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Segunda Vida | Catálogo</title>
+
+  <title>Segunda Vida | Ropa, calzado y artículos de segunda mano</title>
+
+  <meta
+          name="description"
+          content="Segunda Vida: catálogo de ropa, calzado y artículos de segunda mano. Consulta productos disponibles y contáctanos en Facebook para comprar."
+  >
+
+  <link rel="canonical" href="https://reyko.site/">
+
   <link rel="icon" type="image/png" href="images/segunda-vida-favicon-40x40.png">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Segunda Vida">
+  <meta property="og:title" content="Segunda Vida | Ropa, calzado y artículos de segunda mano">
+  <meta property="og:description" content="Catálogo de ropa, calzado y artículos de segunda mano. Consulta productos disponibles y contáctanos en Facebook.">
+  <meta property="og:url" content="https://reyko.site/">
+  <meta property="og:image" content="https://reyko.site/images/logo4.png">
+  <meta property="og:locale" content="es_MX">
+
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-26D5X0BDH9"></script>
   <script>
@@ -14,8 +33,10 @@
 
     gtag('config', 'G-26D5X0BDH9');
   </script>
+
   <link rel="stylesheet" href="css/styles.css?v=8">
 </head>
+
 <body>
 <header class="site-header">
   <div class="container header-content">
@@ -27,25 +48,60 @@
     <p class="site-tagline">Catálogo de productos de segunda mano</p>
   </div>
 </header>
-  <main class="container">
-    <section class="catalog-intro" aria-labelledby="catalog-title">
-      <h1 id="catalog-title">Explora el catálogo</h1>
-      <p>Encuentra artículos usados en buen estado. Este sitio es solo informativo.</p>
-      <div id="catalog-contact"></div>
-    </section>
-    <section class="filters" aria-labelledby="filters-title">
-      <h2 id="filters-title" class="visually-hidden">Buscar y filtrar productos</h2>
-      <div class="filter-field filter-search"><label for="search">Buscar</label><input id="search" type="search" placeholder="Nombre o descripción" autocomplete="off"></div>
-      <div class="filter-field"><label for="category-filter">Categoría</label><select id="category-filter"><option value="">Todas las categorías</option></select></div>
-      <div class="filter-field"><label for="subcategory-filter">Subcategoría</label><select id="subcategory-filter"><option value="">Todas las subcategorías</option></select></div>
-    </section>
-    <p id="results-count" class="results-count" aria-live="polite"></p>
-    <section id="product-list" class="product-grid" aria-label="Productos"></section>
-    <p id="empty-state" class="empty-state" hidden>No encontramos productos con esos filtros.</p>
-    <nav id="pagination" class="pagination" aria-label="Paginación de productos" hidden></nav>
-  </main>
-  <footer class="site-footer"><div class="container">Segunda Vida · Catálogo informativo</div></footer>
-  <script src="js/catalog-data.js?v=8"></script>
-  <script src="js/catalog.js?v=8"></script>
+
+<main class="container">
+  <section class="catalog-intro" aria-labelledby="catalog-title">
+    <h1 id="catalog-title">Explora el catálogo</h1>
+    <p>
+      Encuentra ropa, calzado y artículos de segunda mano disponibles en Segunda Vida.
+      Consulta los detalles de cada producto y contáctanos en Facebook para comprar
+      o conocer su disponibilidad.
+    </p>
+    <div id="catalog-contact"></div>
+  </section>
+
+  <section class="filters" aria-labelledby="filters-title">
+    <h2 id="filters-title" class="visually-hidden">Buscar y filtrar productos</h2>
+
+    <div class="filter-field filter-search">
+      <label for="search">Buscar</label>
+      <input id="search" type="search" placeholder="Nombre o descripción" autocomplete="off">
+    </div>
+
+    <div class="filter-field">
+      <label for="category-filter">Categoría</label>
+      <select id="category-filter">
+        <option value="">Todas las categorías</option>
+      </select>
+    </div>
+
+    <div class="filter-field">
+      <label for="subcategory-filter">Subcategoría</label>
+      <select id="subcategory-filter">
+        <option value="">Todas las subcategorías</option>
+      </select>
+    </div>
+  </section>
+
+  <p id="results-count" class="results-count" aria-live="polite"></p>
+
+  <section id="product-list" class="product-grid" aria-label="Productos"></section>
+
+  <p id="empty-state" class="empty-state" hidden>
+    No encontramos productos con esos filtros.
+  </p>
+
+  <nav id="pagination" class="pagination" aria-label="Paginación de productos" hidden></nav>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    Segunda Vida · Catálogo informativo
+  </div>
+</footer>
+
+<script src="js/catalog-data.js?v=8"></script>
+<script src="js/catalog.js?v=8"></script>
+
 </body>
 </html>
