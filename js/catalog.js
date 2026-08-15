@@ -75,7 +75,7 @@
       var content = document.createElement("div"); content.className = "card-content";
       var categoryText = document.createElement("p"); categoryText.className = "card-category"; categoryText.textContent = product.category + " · " + product.subcategory;
       var title = document.createElement("h2"); title.className = "card-title";
-      var titleLink = document.createElement("a"); titleLink.href = "product.html?id=" + encodeURIComponent(product.id); titleLink.textContent = product.name; title.appendChild(titleLink);
+      var titleLink = document.createElement("a"); titleLink.href = "product.html?slug=" + encodeURIComponent(product.slug); titleLink.textContent = product.name; title.appendChild(titleLink);
       var brand = document.createElement("p"); brand.className = "product-brand"; brand.textContent = product.brand;
       var price = document.createElement("p"); price.className = "price"; price.textContent = currency.format(product.price);
       var availability = document.createElement("p"); availability.className = "availability " + (product.available ? "available" : "unavailable"); availability.textContent = product.available ? "Disponible" : "No disponible";

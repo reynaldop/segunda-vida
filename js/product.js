@@ -2,8 +2,8 @@
   "use strict";
 
   var detail = document.getElementById("product-detail");
-  var productId = new URLSearchParams(window.location.search).get("id");
-  var product = window.catalogData.products.find(function (item) { return String(item.id) === productId; });
+  var productSlug = new URLSearchParams(window.location.search).get("slug");
+  var product = window.catalogData.products.find(function (item) { return item.slug === productSlug;  });
 
   var currency = new Intl.NumberFormat("es-MX", {
     style: "currency",
