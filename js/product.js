@@ -210,6 +210,9 @@
 
   var image = document.createElement("img");
   image.className = "carousel-image";
+  var imageFrame = document.createElement("div");
+  imageFrame.className = "product-image-frame";
+  imageFrame.appendChild(image);
 
 
   var controls = document.createElement("div");
@@ -251,7 +254,7 @@
 
   var availability = document.createElement("p");
   availability.className = "availability " + (product.available ? "available" : "unavailable");
-  availability.textContent = product.available ? "Disponible" : "No disponible";
+  availability.textContent = product.available ? "Disponible" : (product.stock || "No disponible");
 
 
   var description = document.createElement("p");
@@ -384,7 +387,7 @@
   );
 
 
-  gallery.append(image);
+  gallery.append(imageFrame);
 
   if (images.length > 1) {
     gallery.append(controls, indicators);
@@ -399,6 +402,7 @@
 
 
   function showImage(index) {
+    imageFrame.classList.toggle("is-sold", product.stock === "Vendido" && (!hasImages || (index + images.length) % images.length === 0));
 
     if (!hasImages) {
 

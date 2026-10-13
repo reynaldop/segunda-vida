@@ -23,6 +23,8 @@ select:disabled { color:var(--muted); background:#eef0ee; }
 .product-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:1.25rem; padding-bottom:2.5rem; }
 .product-card { display:flex; flex-direction:column; overflow:hidden; background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); }
 .product-card img { width:100%; aspect-ratio:4/3; object-fit:contain; background:#e9ebe8; }
+.product-image-frame { position:relative; overflow:hidden; flex-shrink:0; border-radius:.5rem; }
+.product-image-frame.is-sold::after { content:"Vendido"; position:absolute; top:50%; left:50%; width:150%; padding:.55rem 0; transform:translate(-50%,-50%) rotate(-35deg); background:rgb(153 27 27 / 55%); color:#fff; text-align:center; text-transform:uppercase; font-size:clamp(1rem,3vw,1.6rem); font-weight:800; letter-spacing:.15em; text-shadow:0 1px 2px rgb(0 0 0 / 35%); pointer-events:none; }
 .card-content { display:grid; gap:.55rem; padding:1rem; height:100%; }
 .card-category { margin:0; color:var(--muted); font-size:.85rem; }
 .card-title { margin:0; font-size:1.1rem; }

@@ -72,15 +72,17 @@
     pageProducts.forEach(function (product) {
       var article = document.createElement("article"); article.className = "product-card";
       var image = document.createElement("img"); image.src = product.images[0]; image.alt = product.name;
+      var imageFrame = document.createElement("div"); imageFrame.className = "product-image-frame"; imageFrame.appendChild(image);
+      if (product.stock === "Vendido") imageFrame.classList.add("is-sold");
       var content = document.createElement("div"); content.className = "card-content";
       var categoryText = document.createElement("p"); categoryText.className = "card-category"; categoryText.textContent = product.category + " · " + product.subcategory;
       var title = document.createElement("h2"); title.className = "card-title";
       var titleLink = document.createElement("a"); titleLink.href = "product.html?slug=" + encodeURIComponent(product.slug); titleLink.textContent = product.name; title.appendChild(titleLink);
       var brand = document.createElement("p"); brand.className = "product-brand"; brand.textContent = product.brand;
       var price = document.createElement("p"); price.className = "price"; price.textContent = currency.format(product.price);
-      var availability = document.createElement("p"); availability.className = "availability " + (product.available ? "available" : "unavailable"); availability.textContent = product.available ? "Disponible" : "No disponible";
+      var availability = document.createElement("p"); availability.className = "availability " + (product.available ? "available" : "unavailable"); availability.textContent = product.available ? "Disponible" : (product.stock || "No disponible");
       var detailLink = document.createElement("a"); detailLink.className = "detail-link"; detailLink.href = titleLink.href; detailLink.textContent = "Ver detalle";
-      content.append(categoryText, title, brand, price, availability, detailLink); article.append(image, content); productList.appendChild(article);
+      content.append(categoryText, title, brand, price, availability, detailLink); article.append(imageFrame, content); productList.appendChild(article);
     });
     resultsCount.textContent = filtered.length === 1 ? "1 producto encontrado" : filtered.length + " productos encontrados"; emptyState.hidden = filtered.length !== 0;
     renderPagination(totalPages);
