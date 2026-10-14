@@ -63,7 +63,7 @@
 
   setMeta(
       "description",
-      product.description + " Marca: " + product.brand + ". Disponible en Segunda Vida."
+      product.description + " Marca: " + product.brand + ". Segunda Vida."
   );
 
 
