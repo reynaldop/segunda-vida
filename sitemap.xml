@@ -4,6 +4,12 @@
     <loc>https://reyko.site/</loc>
   </url>
   <url>
+    <loc>https://reyko.site/product.html?slug=suicide-squad-vol-7-drain-the-swamp</loc>
+    <image:image>
+      <image:loc>https://reyko.site/images/products/placeholder.svg</image:loc>
+    </image:image>
+  </url>
+  <url>
     <loc>https://reyko.site/product.html?slug=mini-set-de-juego-mighty-max-bluebird-toys-1993-cabeza-de-gorila</loc>
     <image:image>
       <image:loc>https://reyko.site/images/products/13/IMG_9949.webp</image:loc>
