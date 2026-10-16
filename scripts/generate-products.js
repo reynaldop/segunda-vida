@@ -5,6 +5,9 @@ const { root, products, siteConfig, productPath, absolute, escape: e } = require
 const template = fs.readFileSync(path.join(root, 'product.html'), 'utf8');
 const currency = new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN', maximumFractionDigits: 0 });
 const json = value => JSON.stringify(value, null, 2).replace(/</g, '\\u003c');
+const renderRelatedProduct = require('./render-related-product');
+const { renderProductMetadata, summarizeDescription } = require('./render-product-details');
+
 for (const p of products) {
   const url = absolute(productPath(p));
   const images = (p.images || []).filter(Boolean).map(absolute);
@@ -28,20 +31,29 @@ for (const p of products) {
     { '@type': 'ListItem', position: 2, name: p.category, item: absolute('/') },
     { '@type': 'ListItem', position: 3, name: p.name, item: url }
   ] };
-  const detail = `<section id="product-detail" class="product-detail" data-slug="${e(p.slug)}" aria-live="polite">
+  const summary = summarizeDescription(p);
+  const fullDescription = summary === p.description.trim()
+    ? '<p>La descripción completa de este artículo está en la ficha principal. <a href="#product-detail">Volver a la ficha</a>.</p>'
+    : `<p class="description">${e(p.description)}</p>`;
+  const detail = `<section id="product-detail" class="product-detail product-hero" data-slug="${e(p.slug)}" aria-live="polite">
     <section class="carousel" aria-label="${e('Galería de imágenes de ' + p.name)}">
       <div class="product-image-frame${p.stock === 'Vendido' ? ' is-sold' : ''}"><img class="carousel-image" src="${e(image)}" alt="${e(p.name)}"></div>
+      ${images.length > 1 ? `<div class="carousel-controls" hidden><button class="carousel-button previous" type="button">← Anterior</button><button class="carousel-button next" type="button">Siguiente →</button></div><div class="carousel-indicators" aria-label="Seleccionar imagen" hidden>${images.map((src, index) => `<button class="indicator" type="button" aria-label="Mostrar imagen ${index + 1}" aria-current="${index === 0}"><img src="${e(src)}" alt="" loading="lazy" width="54" height="66"></button>`).join('')}</div>` : ''}
     </section>
     <div class="product-info">
+      <nav class="breadcrumb" aria-label="Ruta de navegación"><a href="/">Inicio</a> / <a href="/#catalogo">Catálogo</a> / <span>${e(p.category)}</span></nav>
+      <p class="product-category">${e(p.category)} · ${e(p.subcategory)}</p>
+      <p class="availability ${p.available ? 'available' : 'unavailable'}">${e(p.available ? 'Disponible' : p.stock || 'No disponible')}</p>
       <h1>${e(p.name)}</h1>
       <p class="price">${e(currency.format(p.price))}</p>
-      <p class="availability ${p.available ? 'available' : 'unavailable'}">${e(p.available ? 'Disponible' : p.stock || 'No disponible')}</p>
-      <p class="description">${e(p.description)}</p>
-      <ul class="product-meta">${[['Marca', p.brand], ['Categoría', p.category], ['Subcategoría', p.subcategory], ['Condición', p.condition]].map(([label, value]) => `<li><strong>${label}:</strong> ${e(value)}</li>`).join('')}</ul>
-      ${p.facebookUrl && p.facebookUrl !== '#' ? `<a class="product-facebook-link" href="${e(p.facebookUrl)}" target="_blank" rel="noopener noreferrer">Ver en Facebook</a>` : ''}
-      <section class="product-contact" aria-label="Contacto sobre este artículo"><p>¿Te gustó este artículo?</p><a href="${e(siteConfig.facebookUrl)}" target="_blank" rel="noopener noreferrer">Contáctame por Facebook</a></section>
+      <p class="product-summary">${e(summary)}</p>
+      ${renderProductMetadata(p)}
+      <section class="product-contact" aria-label="Contacto sobre este artículo"><a class="button contact-primary" href="${e(siteConfig.facebookUrl)}" target="_blank" rel="noopener noreferrer">Me interesa este artículo</a>
+      ${p.facebookUrl && p.facebookUrl !== '#' ? `<a class="button button-secondary product-facebook-link" href="${e(p.facebookUrl)}" target="_blank" rel="noopener noreferrer">Ver publicación en Facebook</a>` : ''}</section>
     </div>
   </section>`;
+  const related = products.filter(item => item.slug !== p.slug && (item.category === p.category || item.subcategory === p.subcategory)).slice(0, 4);
+  const relatedHtml = related.length ? `<section class="related-products" aria-labelledby="related-title"><h2 id="related-title">Productos relacionados</h2><div class="related-products-grid">${related.map(renderRelatedProduct).join('')}</div></section>` : '';
   let html = template.replace(/<title>.*?<\/title>/, () => `<title>${e(p.name)} | Segunda Vida</title>`)
     .replace(/<meta\s+name="description"\s+content="[^"]*"\s*>/, () => `<meta name="description" content="${e(p.description)}">`)
     .replace(/<link rel="canonical"[^>]*>/, () => `<link rel="canonical" href="${e(url)}">`);
@@ -51,7 +63,9 @@ for (const p of products) {
   html = html.replace('</head>', () => `  <meta name="twitter:card" content="summary_large_image">\n  <script type="application/ld+json">${json(schema)}</script>\n  <script type="application/ld+json">${json(breadcrumb)}</script>\n</head>`)
     .replace(/(href|src)="(images\/|css\/|js\/)/g, '$1="/$2')
     .replace(/href="index.html"/g, 'href="/"')
-    .replace('<section id="product-detail" aria-live="polite"></section>', () => detail);
+    .replace('<section id="product-detail" aria-live="polite"></section>', () => detail)
+    .replace('<!-- product-description -->', () => fullDescription)
+    .replace('  <!-- related-products -->', () => relatedHtml ? '  ' + relatedHtml : '');
   const directory = path.join(root, 'productos', p.slug);
   fs.mkdirSync(directory, { recursive: true });
   fs.writeFileSync(path.join(directory, 'index.html'), html);

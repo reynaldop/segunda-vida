@@ -13,7 +13,7 @@
 
   <link rel="canonical" href="https://reyko.site/product.html">
 
-  <link rel="icon" type="image/png" href="images/segunda-vida-favicon-40x40.png">
+  <link rel="icon" type="image/png" href="/images/segunda-vida-favicon-40x40.png">
 
   <!-- Open Graph -->
   <meta property="og:type" content="product">
@@ -34,35 +34,37 @@
     gtag('config', 'G-26D5X0BDH9');
   </script>
 
-  <link rel="stylesheet" href="css/styles.css?v=10">
+  <link rel="stylesheet" href="/css/styles.css?v=17">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="/js/layout.js?v=15" defer></script>
 </head>
 
 <body>
-<header class="site-header">
-  <div class="container header-content">
-    <a class="logo brand" href="index.html" aria-label="Segunda Vida, inicio">
-      <img src="images/logo4.png" alt="Logo Segunda Vida">
-      <span>Segunda Vida</span>
-    </a>
+<div id="site-header"></div>
 
-    <p class="site-tagline">Catálogo de productos de segunda mano</p>
-  </div>
-</header>
+<main id="contenido" class="container product-page">
+  <a class="back-link" href="/">← Volver al catálogo</a>
 
-<main class="container product-page">
-  <a class="back-link" href="index.html">← Volver al catálogo</a>
-
-  <section id="product-detail" aria-live="polite"></section>
+  <div class="product-content"><section id="product-detail" aria-live="polite"></section></div>
+  <div class="benefits benefits-product" data-site-benefits></div>
+  <section class="product-support" aria-label="Información del artículo">
+    <nav class="product-sections-nav" aria-label="Secciones del artículo"><a href="#descripcion">Descripción</a><a href="#detalles">Detalles</a><a href="#entrega">Envío y entrega</a></nav>
+    <div class="product-sections">
+      <section id="descripcion"><h2>Descripción</h2><!-- product-description --></section>
+      <section id="detalles"><h2>Detalles</h2><p>La marca, la condición y las referencias del artículo se muestran en la ficha principal. Revisa también las fotografías de la galería para apreciar sus detalles.</p></section>
+      <section id="entrega"><h2>Envío y entrega</h2><p>Consulta por Facebook las opciones de entrega disponibles para este artículo. Confirma la disponibilidad y acuerda los detalles antes de comprar.</p></section>
+    </div>
+  </section>
+  <!-- related-products -->
 </main>
 
-<footer class="site-footer">
-  <div class="container">
-    Segunda Vida · Catálogo informativo
-  </div>
-</footer>
+<div id="site-footer"></div>
 
-<script src="js/catalog-data.js?v=10"></script>
-<script src="js/product.js?v=11"></script>
+<script src="/js/catalog-data.js?v=14"></script>
+<script src="/js/product.js?v=12"></script>
+
 
 </body>
 </html>

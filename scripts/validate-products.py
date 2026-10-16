@@ -1,5 +1,6 @@
 """Validación local sin dependencias: python3 scripts/validate-products.py."""
 import json
+import re
 from html.parser import HTMLParser
 from pathlib import Path
 import subprocess
@@ -42,6 +43,16 @@ class Page(HTMLParser):
         if self.script is not None:
             self.script += data
 
+# El HTML de cada página mantiene solo placeholders del layout global.
+for file in [ROOT / 'index.html', ROOT / 'product.html', *sorted((ROOT / 'productos').glob('*/index.html'))]:
+    markup = file.read_text()
+    for name in ('site-header', 'site-footer'):
+        assert markup.count(f'<div id="{name}"></div>') == 1, f'Placeholder inválido: {file}'
+    assert not re.search(r'<(?:header|footer)\b', markup), f'Layout global duplicado: {file}'
+    assert len(re.findall(r'<script src="/js/layout\.js[^"]*" defer></script>', markup)) == 1, f'Layout compartido ausente: {file}'
+    assert '/js/ui.js' not in markup
+assert (ROOT / 'js/layout.js').is_file()
+
 slugs = [p['slug'] for p in products]
 assert len(slugs) == len(set(slugs))
 assert {p.name for p in (ROOT / 'productos').iterdir() if p.is_dir()} == set(slugs)
@@ -78,10 +89,20 @@ for p in products:
         parsed = urlparse(link)
         if parsed.netloc and parsed.netloc != 'reyko.site':
             continue
+        if not parsed.path and parsed.fragment:
+            assert f'id="{parsed.fragment}"' in html, f'Ancla inexistente: {link}'
+            continue
         local = ROOT / unquote(parsed.path).lstrip('/')
         if parsed.path.endswith('/'):
             local /= 'index.html'
         assert local.is_file(), f'Enlace roto: {link}'
-assert '"/productos/" + encodeURIComponent(product.slug) + "/"' in (ROOT / 'js/catalog.js').read_text()
+catalog_source = (ROOT / 'js/catalog.js').read_text()
+url_helper = re.search(r'function getProductUrl\(slug\) \{[^}]+\}', catalog_source)
+assert url_helper, 'Helper de URL ausente'
+product_paths = json.loads(subprocess.check_output([
+    'node', '-e', url_helper.group() + "console.log(JSON.stringify(require('./scripts/catalog').products.map(p => getProductUrl(p.slug))))"
+], cwd=ROOT))
+assert product_paths == ['/productos/' + p['slug'] + '/' for p in products]
+assert len(product_paths) == len(set(product_paths)), 'Destinos de producto duplicados'
 assert 'product.html?slug=' not in (ROOT / 'js/catalog.js').read_text()
 print(f'OK: {len(products)} carpetas, HTML, SEO, JSON-LD, enlaces e imágenes; sitemap con {len(entries)} URLs.')

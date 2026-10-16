@@ -2,7 +2,8 @@
 window.catalogData = {
 
   siteConfig: {
-    facebookUrl: "https://www.facebook.com/segundavidastores"
+    facebookUrl: "https://www.facebook.com/segundavidastores",
+    instagramUrl: "https://www.instagram.com/segundavidastores/"
   },
   categories: [
     { name: "Ropa", subcategories: ["Mujer", "Hombre", "Niños", "Niñas", "Lluvia"] },
