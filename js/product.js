@@ -2,7 +2,7 @@
   "use strict";
 
   var detail = document.getElementById("product-detail");
-  var productSlug = new URLSearchParams(window.location.search).get("slug");
+  var productSlug = detail.dataset.slug || new URLSearchParams(window.location.search).get("slug");
   var product = window.catalogData.products.find(function (item) { return item.slug === productSlug;  });
 
   var currency = new Intl.NumberFormat("es-MX", {
@@ -18,165 +18,11 @@
     return;
   }
 
-  // SEO dinámico del producto
-  var productUrl = window.location.href;
-  var productImage = product.images && product.images.length
-      ? new URL(product.images[0], window.location.href).href
-      : new URL("images/products/placeholder.svg", window.location.href).href;
-
-  document.title = product.name + " | Segunda Vida";
-
-
-  function setMeta(name, content) {
-
-    var meta = document.querySelector('meta[name="' + name + '"]');
-
-    if (!meta) {
-
-      meta = document.createElement("meta");
-      meta.name = name;
-      document.head.appendChild(meta);
-
-    }
-
-    meta.content = content;
-
+  // Compatibilidad con enlaces antiguos: conservar la URL estática como destino.
+  if (!detail.dataset.slug) {
+    window.location.replace("/productos/" + encodeURIComponent(product.slug) + "/" + window.location.hash);
+    return;
   }
-
-
-  function setPropertyMeta(property, content) {
-
-    var meta = document.querySelector('meta[property="' + property + '"]');
-
-    if (!meta) {
-
-      meta = document.createElement("meta");
-      meta.setAttribute("property", property);
-      document.head.appendChild(meta);
-
-    }
-
-    meta.content = content;
-
-  }
-
-
-  setMeta(
-      "description",
-      product.description + " Marca: " + product.brand + ". Segunda Vida."
-  );
-
-
-  var canonical = document.querySelector('link[rel="canonical"]');
-
-  if (!canonical) {
-
-    canonical = document.createElement("link");
-    canonical.rel = "canonical";
-    document.head.appendChild(canonical);
-
-  }
-
-  canonical.href = window.location.origin + window.location.pathname + "?slug=" + product.slug;
-
-
-  setPropertyMeta(
-      "og:title",
-      product.name + " | Segunda Vida"
-  );
-
-
-  setPropertyMeta(
-      "og:description",
-      product.description
-  );
-
-
-  setPropertyMeta(
-      "og:url",
-      productUrl
-  );
-
-
-  setPropertyMeta(
-      "og:image",
-      productImage
-  );
-
-  // Datos estructurados Schema.org - Product
-  var productSchema = {
-    "@context": "https://schema.org",
-    "@type": "Product",
-    "name": product.name,
-    "description": product.description,
-    "sku": String(product.sku),
-    "brand": {
-      "@type": "Brand",
-      "name": product.brand
-    },
-    "additionalType": "https://schema.org/IndividualProduct",
-    "category": product.category + " > " + product.subcategory,
-    "image": product.images
-        .filter(Boolean)
-        .map(function (image) {
-          return new URL(image, window.location.href).href;
-        }),
-    "itemCondition": product.condition === "Nuevos"
-        ? "https://schema.org/NewCondition"
-        : "https://schema.org/UsedCondition",
-    "offers": {
-      "@type": "Offer",
-      "url": canonical.href,
-      "mpn": product.slug,
-      "priceCurrency": "MXN",
-      "price": product.price.toFixed(2),
-      "availability": product.available
-          ? "https://schema.org/InStock"
-          : "https://schema.org/OutOfStock",
-      "seller": {
-        "@type": "Organization",
-        "name": "Segunda Vida",
-        "url": "https://reyko.site/"
-      }
-    }
-  };
-
-  var schemaScript = document.createElement("script");
-  schemaScript.type = "application/ld+json";
-  schemaScript.textContent = JSON.stringify(productSchema);
-  document.head.appendChild(schemaScript);
-
-  // Datos estructurados Schema.org - BreadcrumbList
-  var breadcrumbSchema = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    "itemListElement": [
-      {
-        "@type": "ListItem",
-        "position": 1,
-        "name": "Inicio",
-        "item": "https://reyko.site/"
-      },
-      {
-        "@type": "ListItem",
-        "position": 2,
-        "name": product.category,
-        "item": "https://reyko.site/"
-      },
-      {
-        "@type": "ListItem",
-        "position": 3,
-        "name": product.name,
-        "item": canonical.href
-      }
-    ]
-  };
-
-
-  var breadcrumbScript = document.createElement("script");
-  breadcrumbScript.type = "application/ld+json";
-  breadcrumbScript.textContent = JSON.stringify(breadcrumbSchema);
-  document.head.appendChild(breadcrumbScript);
 
   // Google Analytics 4 - Vista de producto
   if (typeof gtag === "function") {
@@ -394,7 +240,7 @@
   }
 
 
-  detail.append(gallery, info);
+  detail.replaceChildren(gallery, info);
 
 
 
@@ -406,7 +252,7 @@
 
     if (!hasImages) {
 
-      image.src = "images/products/placeholder.svg";
+      image.src = "/images/products/placeholder.svg";
       image.alt = "Imagen no disponible de " + product.name;
 
       return;
@@ -416,7 +262,7 @@
 
     currentIndex = (index + images.length) % images.length;
 
-    image.src = images[currentIndex];
+    image.src = new URL(images[currentIndex], window.location.origin + "/").href;
 
     image.alt =
         product.name +

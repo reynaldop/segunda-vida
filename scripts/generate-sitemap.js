@@ -1,12 +1,7 @@
 // Ejecutar desde cualquier directorio: node scripts/generate-sitemap.js
 const fs = require("node:fs");
 const path = require("node:path");
-const vm = require("node:vm");
-
-const root = path.resolve(__dirname, "..");
-const baseUrl = new URL("https://" + fs.readFileSync(path.join(root, "CNAME"), "utf8").trim() + "/");
-const context = { window: {} };
-vm.runInNewContext(fs.readFileSync(path.join(root, "js/catalog-data.js"), "utf8"), context);
+const { root, baseUrl, products, productPath } = require("./catalog");
 
 function escapeXml(value) {
   return value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
@@ -28,9 +23,19 @@ function entry(url, images = []) {
 const entries = [entry(baseUrl.href)];
 // Las fichas vendidas siguen siendo indexables; los productos comentados no se cargan.
 // No hay fechas confiables en el catálogo: se omite lastmod.
-for (const product of context.window.catalogData.products) {
-  if (!product.slug) throw new Error("Producto sin slug: " + product.sku);
-  const url = new URL("product.html?slug=" + encodeURIComponent(product.slug), baseUrl).href;
+for (const product of products) {
+  const page = path.join(root, "productos", product.slug, "index.html");
+  if (!fs.existsSync(page) || !fs.statSync(page).isFile()) {
+    throw new Error("Página estática inexistente: " + page);
+  }
+  for (const image of product.images || []) {
+    const imageUrl = new URL(image, baseUrl);
+    const localImage = path.join(root, decodeURIComponent(imageUrl.pathname));
+    if (imageUrl.origin !== baseUrl.origin || !fs.existsSync(localImage) || !fs.statSync(localImage).isFile()) {
+      throw new Error("Imagen inexistente o ajena al sitio: " + image);
+    }
+  }
+  const url = new URL(productPath(product), baseUrl).href;
   entries.push(entry(url, product.images || []));
 }
 
